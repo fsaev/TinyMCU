@@ -10,6 +10,7 @@ Open toptrace.vcd with gtkwave
 This project is still a work in progress. The CPU works, you can have some fun by doing some assembly level programming in simple_ram.sv.
 
 ### CPU
+**| cpu.sv | controller.sv | alu.sv | register.sv |**
 
 **Implemented:**
 NOP, HALT, LDAI, LDA, STA, LDBI, LDB, STB, ADD, SUB, AND, OR, XOR, NOT, SHL, SHR, JMP, JZ, JNZ
@@ -19,9 +20,15 @@ NOP, HALT, LDAI, LDA, STA, LDBI, LDB, STB, ADD, SUB, AND, OR, XOR, NOT, SHL, SHR
 ADDI, SUBI, ANDI, ORI, XORI, SHLI, SHRI, JC, JNC
 
 ### RAM
+**| simple_ram.sv |**
 Work in progress, support for block RAM and external memory
 
+### 7-segment output
+**| seg.sv |**
+Complete
+
 ### UART
+**| uart.sv |**
 Work in progress
 
 ### SPI
