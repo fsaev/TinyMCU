@@ -28,6 +28,7 @@ reg [7:0] CDIV_H = 0; // [15][14][13][12][11][10][9][8]
 reg [7:0] CDIV_L = 0; // [7][6][5][4][3][2][1][0] Clock divider
 reg [7:0] DI = 0; // [7:0] Data in
 reg [7:0] DO = 0; // [7:0] Data out
+reg DO_has_data = 0; // Must have a flag because DO can also be zero
 
 reg [9:0] DO_byte_out = 0;
 reg [3:0] DO_bit_cnt = 0;
@@ -46,7 +47,10 @@ always_ff @(posedge clk) begin
                 16'h0002: CDIV_H <= mmio_data_in;
                 16'h0003: CDIV_L <= mmio_data_in;
                 16'h0004: begin end // DI is read only
-                16'h0005: DO <= mmio_data_in;
+                16'h0005: begin 
+                            DO <= mmio_data_in;
+                            DO_has_data <= 1;
+                          end
                 default: begin end // Do nothing
             endcase
         end
@@ -67,46 +71,50 @@ end
 
 /* Status Register */
 always_comb begin
-    SR[0] <= !(DI & 8'hFF); // If DI contains any bits, TXR is clear
-    SR[1] <= (DO_bit_cnt == 3'b000); // If bitcount is 0 RXR is clear
+    SR[0] <= !((DI & 8'hFF) > 0); // If DI contains any bits, TXR is clear
+    SR[1] <= (DO_bit_cnt == 4'b0000); // If bitcount is 0 RXR is clear
 end
 
 always_ff @(posedge clk) begin
-    if(device_select == device_address) begin
 
         /* Load byte out */
         if(CR[0]) begin // TX Enabled
-            if(SR[0] && DO) begin // TX Ready
+            if(SR[0] && (DO_has_data == 1)) begin // TXR clear and DO has data
                 SR[0] <= 0;
-                DO_byte_out <= DO;
+                DO_byte_out[8:1] <= DO;
+                tx_state <= LOAD_DATA_OUT;
             end
         end
 
         // TX State Machine
         case(tx_state)
             IDLE: begin
-                // State transition conditions and actions
+                // Do nothing
             end
             LOAD_DATA_OUT: begin
                 DO_byte_out[10] <= 1; // Start bit
                 DO_byte_out[9:1] <= DO[7:0];
                 DO_byte_out[0] <= 0; // Stop bit
 
-                D0_bit_cnt <= 3'b000;
+                DO_bit_cnt <= 3'b000;
                 tx_state <= SHIFT_OUT_BYTE;
             end
             SHIFT_OUT_BYTE: begin
-                // State transition conditions and actions
+                DO <= 0; // Wipe DO
+                if(DO_bit_cnt < 10) begin
+                    tx <= DO_byte_out[DO_bit_cnt];
+                    DO_bit_cnt <= DO_bit_cnt + 1;
+                end else begin
+                    tx <= 1; // Idle state
+                    tx_state <= IDLE;
+                end
             end
             default: begin
                 // Default state
             end
         endcase
 
-    end
 end
-//         cnt <= cnt + 1;
-// end
 
 endmodule
 
