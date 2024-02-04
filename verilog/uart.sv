@@ -14,6 +14,13 @@ module uart(   input [2:0] device_select,
 
 parameter device_address = 3'b011;
 
+/* UART State Machine */
+typedef enum logic [2:0] {
+    IDLE,
+    LOAD_DATA_OUT,
+    SHIFT_OUT_BYTE
+} tx_state_e;
+
 /* Peripheral registers */
 reg [7:0] CR = 0; // [x][x][x][x][P_H][P_L][TXE][RXE]
 reg [7:0] SR = 0; // [x][x][x][x][x][x][TXR][RXR]
@@ -26,6 +33,8 @@ reg [9:0] DO_byte_out = 0;
 reg [3:0] DO_bit_cnt = 0;
 
 reg [7:0] DI_shift_reg [0:7];
+
+tx_state_e tx_state;
 
 /* Address mapping */
 always_ff @(posedge clk) begin
@@ -57,46 +66,45 @@ always_ff @(posedge clk) begin
 end
 
 /* Status Register */
-// always_comb begin
-//     SR[0] <= !(DI & 8'hFF) // If DI contains any bits, TXR is clear
-//     SR[1] <= (DO_bit_cnt == 3'b000) // If bitcount is 0 RXR is clear
-// end
+always_comb begin
+    SR[0] <= !(DI & 8'hFF); // If DI contains any bits, TXR is clear
+    SR[1] <= (DO_bit_cnt == 3'b000); // If bitcount is 0 RXR is clear
+end
 
-// always_ff @(posedge clk) begin
-//     if(device_select == device_address) begin
-//
-//         /* Load byte out */
-//         if(CR[0]) begin // TX Enabled
-//             if(SR[0] && DO) begin // TX Ready
-//                 SR[0] <= 0;
-//                 DO_byte_out <= DO;
-//             end
-//         end
-//
-//
-//     end
-// end
+always_ff @(posedge clk) begin
+    if(device_select == device_address) begin
 
+        /* Load byte out */
+        if(CR[0]) begin // TX Enabled
+            if(SR[0] && DO) begin // TX Ready
+                SR[0] <= 0;
+                DO_byte_out <= DO;
+            end
+        end
 
-// /* Bit handler */
-// reg [9:0] shft_out = 0;
-// reg [3:0] cnt = 0;
+        // TX State Machine
+        case(tx_state)
+            IDLE: begin
+                // State transition conditions and actions
+            end
+            LOAD_DATA_OUT: begin
+                DO_byte_out[10] <= 1; // Start bit
+                DO_byte_out[9:1] <= DO[7:0];
+                DO_byte_out[0] <= 0; // Stop bit
 
-// assign tx = shft_out[0];
+                D0_bit_cnt <= 3'b000;
+                tx_state <= SHIFT_OUT_BYTE;
+            end
+            SHIFT_OUT_BYTE: begin
+                // State transition conditions and actions
+            end
+            default: begin
+                // Default state
+            end
+        endcase
 
-// always @(posedge clk) begin
-//     if(cnt == 0) begin //fill shift register
-//         shft_out[9] <= 1'b1; //stop bit
-//         shft_out[8:1] <= data[7:0];
-//     end
-
-//     if(cnt > 1 && cnt < 12) begin
-//         shft_out <= shft_out >> 1;
-//     end
-
-//     if(cnt == 12)
-//         cnt <= 0;
-//     else
+    end
+end
 //         cnt <= cnt + 1;
 // end
 

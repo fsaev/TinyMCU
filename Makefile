@@ -15,7 +15,7 @@ TARGET_VERILATOR_FOLDER=./verilator_testbench
 top: $(TARGET_VERILATOR_FOLDER)/top.cpp $(TARGET_VERILOG_FOLDER)/top.sv
 		$(VERILATOR) -cc --exe -trace --build -j 0 -Wall -I"$(TARGET_VERILOG_FOLDER)" --top-module top $(TARGET_VERILATOR_FOLDER)/top.cpp $(TARGET_VERILOG_FOLDER)/top.sv
 
-toptrace.vcd: obj_dir/Vtop
+toptrace.vcd: top obj_dir/Vtop
 	obj_dir/Vtop
 
 view: toptrace.vcd
