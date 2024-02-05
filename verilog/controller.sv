@@ -390,29 +390,32 @@ module controller(input clk, input reset, input wire [7:0] opcode, input alu_car
                 end
             end
             `JZ: begin // JZ (ADDR_H ADDR_L)
-                if (stage == 0) begin // Test if alu_zero is set
-                    if(!alu_zero) begin // If not, fetch next instruction
+                if (stage == 0) begin // If zero, start preparing for jump
+                    if(alu_zero) begin // Load H for jump
+                        mreg_h_load = 1;
+                        ram_read_pc = 1;
+                        cnt_en = 1;
+                    end else begin //If not clock over to next instruction
+                        cnt_en = 1;
+                    end
+                end else if (stage == 1) begin
+                    if(alu_zero) begin // Continue loading L for jump
+                        mreg_l_load = 1;
+                        ram_read_pc = 1;
+                        cnt_en = 1;
+                    end else begin //If not clock over to next instruction
+                        cnt_en = 1;
+                    end
+                end else if (stage == 2) begin 
+                    if(alu_zero) begin // If zero, write MREG_H + MREG_L to PC
+                        cnt_wr = 1;
+                    end else begin //If not, load next instruction
                         ireg_load = 1;
                         ireg_reset = 1;
                         ram_read_pc = 1;
                         cnt_en = 1;
                     end
-                end else if (stage == 1) begin // Load into MREG_H
-                    mreg_h_load = 1;
-                    ram_read_pc = 1;
-                    cnt_en = 1;
-                end else if (stage == 2) begin // Load into MREG_L
-                    mreg_l_load = 1;
-                    ram_read_pc = 1;
-                    cnt_en = 1;
-                end else if (stage == 3) begin // Write MREG_H + MREG_L to PC if zero flag is set
-                    cnt_wr = 1;
-                end else if (stage == 4) begin // Fetch next instruction
-                    ireg_load = 1;
-                    ireg_reset = 1;
-                    ram_read_pc = 1;
-                    cnt_en = 1;
-                end
+                end 
             end
             `JNZ: begin // JNZ (ADDR_H ADDR_L)
                 if (stage == 0) begin // Test if alu_zero is set
