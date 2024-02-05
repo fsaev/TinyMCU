@@ -347,6 +347,138 @@ module controller(input clk, input reset, input wire [7:0] opcode, input alu_car
                     cnt_en = 1;
                 end
             end
+            `MOV_AB: begin // MOV A -> B
+                if (stage == 0) begin // Load into B
+                    areg_out = 1;
+                    breg_load = 1;
+                end else if (stage == 1) begin // Fetch next instruction
+                    ireg_load = 1;
+                    ireg_reset = 1;
+                    ram_read_pc = 1;
+                    cnt_en = 1;
+                end
+            end
+            `MOV_AH: begin // MOV A -> H
+                if (stage == 0) begin // Load into H
+                    areg_out = 1;
+                    hreg_load = 1;
+                end else if (stage == 1) begin // Fetch next instruction
+                    ireg_load = 1;
+                    ireg_reset = 1;
+                    ram_read_pc = 1;
+                    cnt_en = 1;
+                end
+            end
+            `MOV_AL: begin // MOV A -> L
+                if (stage == 0) begin // Load into L
+                    areg_out = 1;
+                    lreg_load = 1;
+                end else if (stage == 1) begin // Fetch next instruction
+                    ireg_load = 1;
+                    ireg_reset = 1;
+                    ram_read_pc = 1;
+                    cnt_en = 1;
+                end
+            end
+            `MOV_BA: begin // MOV B -> A
+                if (stage == 0) begin // Load into A
+                    breg_out = 1;
+                    areg_load = 1;
+                end else if (stage == 1) begin // Fetch next instruction
+                    ireg_load = 1;
+                    ireg_reset = 1;
+                    ram_read_pc = 1;
+                    cnt_en = 1;
+                end
+            end
+            `MOV_BH: begin // MOV B -> H
+                if (stage == 0) begin // Load into H
+                    breg_out = 1;
+                    hreg_load = 1;
+                end else if (stage == 1) begin // Fetch next instruction
+                    ireg_load = 1;
+                    ireg_reset = 1;
+                    ram_read_pc = 1;
+                    cnt_en = 1;
+                end
+            end
+            `MOV_BL: begin // MOV B -> L
+                if (stage == 0) begin // Load into L
+                    breg_out = 1;
+                    lreg_load = 1;
+                end else if (stage == 1) begin // Fetch next instruction
+                    ireg_load = 1;
+                    ireg_reset = 1;
+                    ram_read_pc = 1;
+                    cnt_en = 1;
+                end
+            end
+            `MOV_HA: begin // MOV H -> A
+                if (stage == 0) begin // Load into A
+                    hreg_out = 1;
+                    areg_load = 1;
+                end else if (stage == 1) begin // Fetch next instruction
+                    ireg_load = 1;
+                    ireg_reset = 1;
+                    ram_read_pc = 1;
+                    cnt_en = 1;
+                end
+            end
+            `MOV_HB: begin // MOV H -> B
+                if (stage == 0) begin // Load into B
+                    hreg_out = 1;
+                    breg_load = 1;
+                end else if (stage == 1) begin // Fetch next instruction
+                    ireg_load = 1;
+                    ireg_reset = 1;
+                    ram_read_pc = 1;
+                    cnt_en = 1;
+                end
+            end
+            `MOV_HL: begin // MOV H -> L
+                if (stage == 0) begin // Load into L
+                    hreg_out = 1;
+                    lreg_load = 1;
+                end else if (stage == 1) begin // Fetch next instruction
+                    ireg_load = 1;
+                    ireg_reset = 1;
+                    ram_read_pc = 1;
+                    cnt_en = 1;
+                end
+            end
+            'MOV_LA: begin // MOV L -> A
+                if (stage == 0) begin // Load into A
+                    lreg_out = 1;
+                    areg_load = 1;
+                end else if (stage == 1) begin // Fetch next instruction
+                    ireg_load = 1;
+                    ireg_reset = 1;
+                    ram_read_pc = 1;
+                    cnt_en = 1;
+                end
+            end
+            `MOV_LB: begin // MOV L -> B
+                if (stage == 0) begin // Load into B
+                    lreg_out = 1;
+                    breg_load = 1;
+                end else if (stage == 1) begin // Fetch next instruction
+                    ireg_load = 1;
+                    ireg_reset = 1;
+                    ram_read_pc = 1;
+                    cnt_en = 1;
+                end
+            end
+            `MOV_LH: begin // MOV L -> H
+                if (stage == 0) begin // Load into H
+                    lreg_out = 1;
+                    hreg_load = 1;
+                end else if (stage == 1) begin // Fetch next instruction
+                    ireg_load = 1;
+                    ireg_reset = 1;
+                    ram_read_pc = 1;
+                    cnt_en = 1;
+                end
+            end
             default: begin
                 // Reset all signals
                 `RESET_REGISTERS
