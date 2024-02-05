@@ -541,7 +541,7 @@ module controller(input clk, input reset, input wire [7:0] opcode, input alu_car
                     cnt_en = 1;
                 end
             end
-            'MOV_LA: begin // MOV L -> A
+            `MOV_LA: begin // MOV L -> A
                 if (stage == 0) begin // Load into A
                     lreg_out = 1;
                     areg_load = 1;
