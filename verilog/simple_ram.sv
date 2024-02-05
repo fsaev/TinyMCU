@@ -26,41 +26,29 @@ module simple_ram(
         mem[3] = `STA;
         mem[4] = 8'hF0; // On UART CR
         mem[5] = 8'h00;
-        mem[6] = `LDAI; // Load 0x02 into A
-        mem[7] = 8'h02;
-        mem[8] = `LDB; // Load [0xFF] into B
-        mem[9] = 8'h00;
-        mem[10] = 8'hFF;
-        mem[11] = `ADD; // Add A + B
-        mem[12] = `STA; // Store A into [0xFF]
-        mem[13] = 8'h00;
-        mem[14] = 8'hFF;
-        mem[15] = `LDA; // Load [0xFE] into A
-        mem[16] = 8'h00;
-        mem[17] = 8'hFE;
-        mem[18] = `LDBI; // Load 0x01 into B
-        mem[19] = 8'h01;
-        mem[20] = `SUB; // Subtract A - B
-        mem[21] = `STA; // Store A into [0xFE]
-        mem[22] = 8'h00;
-        mem[23] = 8'hFE;
-        mem[24] = `JNZ; // If result of SUB was not zero, jump to 0x00
-        mem[25] = 8'h00;
-        mem[26] = 8'h00;
-        mem[27] = `LDAI; // Load 0x02 into A
-        mem[28] = 8'h00;
-        mem[29] = `STA; // Store A into [0xFF]
-        mem[30] = 8'h00;
-        mem[31] = 8'hFF;
-        mem[32] = `STA; // Store A into [0xFE]
-        mem[33] = 8'h00;
-        mem[34] = 8'hFE;
-        mem[35] = `JMP; // Jump to 0x00
-        mem[36] = 8'h00;
-        mem[37] = 8'h00;
+        mem[6] = `LDBI; // Load index into B
+        mem[7] = 8'h80; // Start of string
 
-        mem[8'hFE] = 8'h80;
-        mem[8'hFF] = 8'h00;
+        // Start of loop
+        mem[8] = `LDA;
+
+
+
+        mem[128] = "H";
+        mem[129] = "e";
+        mem[130] = "l";
+        mem[131] = "l";
+        mem[132] = "o";
+        mem[133] = " ";
+        mem[134] = "W";
+        mem[135] = "o";
+        mem[136] = "r";
+        mem[137] = "l";
+        mem[138] = "d";
+        mem[139] = "!";
+        mem[140] = "\n";
+        mem[141] = "\r";
+        mem[140] = 8'h00;
 
     end
 

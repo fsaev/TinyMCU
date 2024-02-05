@@ -71,16 +71,15 @@ end
 
 /* Status Register */
 always_comb begin
-    SR[0] <= !((DI & 8'hFF) > 0); // If DI contains any bits, TXR is clear
-    SR[1] <= (DO_bit_cnt == 4'b0000); // If bitcount is 0 RXR is clear
+    SR[0] = !((DI & 8'hFF) > 0); // If DI dont contain any bits, RXR is clear
+    SR[1] = (DO_bit_cnt == 4'b0000); // If bitcount is 0 TXR is clear
 end
 
 always_ff @(posedge clk) begin
 
         /* Load byte out */
         if(CR[0]) begin // TX Enabled
-            if(SR[0] && (DO_has_data == 1)) begin // TXR clear and DO has data
-                SR[0] <= 0;
+            if(SR[1] && (DO_has_data == 1)) begin // TXR clear and DO has data
                 DO_byte_out[8:1] <= DO;
                 tx_state <= LOAD_DATA_OUT;
             end
@@ -92,11 +91,11 @@ always_ff @(posedge clk) begin
                 // Do nothing
             end
             LOAD_DATA_OUT: begin
-                DO_byte_out[10] <= 1; // Start bit
-                DO_byte_out[9:1] <= DO[7:0];
+                DO_byte_out[9] <= 1; // Start bit
+                DO_byte_out[8:1] <= DO[7:0];
                 DO_byte_out[0] <= 0; // Stop bit
 
-                DO_bit_cnt <= 3'b000;
+                DO_bit_cnt <= 4'b0000;
                 tx_state <= SHIFT_OUT_BYTE;
             end
             SHIFT_OUT_BYTE: begin

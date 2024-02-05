@@ -50,3 +50,6 @@
 `define JNZ 8'h1A
 `define JNC 8'h1B // Not implemented
 
+`define MOV 8'h1C // Not implemented
+
+
