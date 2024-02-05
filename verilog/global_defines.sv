@@ -14,12 +14,12 @@
 `define HALT 8'h01
 
 `define LDAI 8'h02
-`define LDA 8'h03
-`define STA 8'h04
+`define LDA_HL 8'h03
+`define STA_HL 8'h04
 
 `define LDBI 8'h05
-`define LDB 8'h06
-`define STB 8'h07
+`define LDB_HL 8'h06
+`define STB_HL 8'h07
 
 `define ADDI 8'h0A // Not implemented
 `define ADD 8'h0B

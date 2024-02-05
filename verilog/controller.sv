@@ -87,15 +87,13 @@ module controller(input clk, input reset, input wire [7:0] opcode, input alu_car
                     cnt_en = 1;
                 end
             end
-            `LDA: begin // LDA (ADDR_H ADDR_L)
+            `LDA_HL: begin // LDA (HL)
                 if (stage == 0) begin // Load into MREG_H
                     mreg_h_load = 1;
-                    ram_read_pc = 1;
-                    cnt_en = 1;
+                    hreg_out = 1;
                 end else if (stage == 1) begin // Load into MREG_L
                     mreg_l_load = 1;
-                    ram_read_pc = 1;
-                    cnt_en = 1;
+                    lreg_out = 1;
                 end else if (stage == 2) begin // Read from RAM into A using MREG as address 
                     areg_load = 1;
                     ram_read_mreg = 1;
@@ -106,15 +104,13 @@ module controller(input clk, input reset, input wire [7:0] opcode, input alu_car
                     cnt_en = 1;
                 end
             end
-            `STA: begin // STA (ADDR_H ADDR_L)
+            `STA_HL: begin // STA (HL)
                 if (stage == 0) begin // Load into MREG_H
                     mreg_h_load = 1;
-                    ram_read_pc = 1;
-                    cnt_en = 1;
+                    hreg_out = 1;
                 end else if (stage == 1) begin // Load into MREG_L
                     mreg_l_load = 1;
-                    ram_read_pc = 1;
-                    cnt_en = 1;
+                    lreg_out = 1;
                 end else if (stage == 2) begin // Write to RAM from A using MREG as address 
                     areg_out = 1;
                     ram_write = 1;
@@ -137,15 +133,13 @@ module controller(input clk, input reset, input wire [7:0] opcode, input alu_car
                     cnt_en = 1;
                 end
             end
-            `LDB: begin // LDB (ADDR_H ADDR_L)
+            `LDB_HL: begin // LDB (HL)
                 if (stage == 0) begin // Load into MREG_H
                     mreg_h_load = 1;
-                    ram_read_pc = 1;
-                    cnt_en = 1;
+                    hreg_out = 1;
                 end else if (stage == 1) begin // Load into MREG_L
                     mreg_l_load = 1;
-                    ram_read_pc = 1;
-                    cnt_en = 1;
+                    lreg_out = 1;
                 end else if (stage == 2) begin // Read from RAM into A using MREG as address 
                     breg_load = 1;
                     ram_read_mreg = 1;
@@ -156,15 +150,13 @@ module controller(input clk, input reset, input wire [7:0] opcode, input alu_car
                     cnt_en = 1;
                 end
             end
-            `STB: begin // STB (ADDR_H ADDR_L)
+            `STB_HL: begin // STB (HL)
                 if (stage == 0) begin // Load into MREG_H
                     mreg_h_load = 1;
-                    ram_read_pc = 1;
-                    cnt_en = 1;
+                    hreg_out = 1;
                 end else if (stage == 1) begin // Load into MREG_L
                     mreg_l_load = 1;
-                    ram_read_pc = 1;
-                    cnt_en = 1;
+                    lreg_out = 1;
                 end else if (stage == 2) begin // Write to RAM from A using MREG as address 
                     breg_out = 1;
                     ram_write = 1;
