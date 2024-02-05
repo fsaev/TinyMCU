@@ -21,6 +21,9 @@
 `define LDB_HL 8'h06
 `define STB_HL 8'h07
 
+`define LDLI 8'h08
+`define LDHI 8'h09
+
 `define ADDI 8'h0A // Not implemented
 `define ADD 8'h0B
 

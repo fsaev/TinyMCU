@@ -167,6 +167,30 @@ module controller(input clk, input reset, input wire [7:0] opcode, input alu_car
                     cnt_en = 1;
                 end
             end
+            `LDLI: begin // LDL (Immediate)
+                if (stage == 0) begin // Load into L
+                    lreg_load = 1;
+                    ram_read_pc = 1;
+                    cnt_en = 1;
+                end else if (stage == 1) begin // Fetch next instruction
+                    ireg_load = 1;
+                    ireg_reset = 1;
+                    ram_read_pc = 1;
+                    cnt_en = 1;
+                end
+            end
+            `LDHI: begin // LDH (Immediate)
+                if (stage == 0) begin // Load into H
+                    hreg_load = 1;
+                    ram_read_pc = 1;
+                    cnt_en = 1;
+                end else if (stage == 1) begin // Fetch next instruction
+                    ireg_load = 1;
+                    ireg_reset = 1;
+                    ram_read_pc = 1;
+                    cnt_en = 1;
+                end
+            end
             `ADD: begin // ADD
                 if (stage == 0) begin // Prepare ALU
                     alu_mode = `ALU_ADD;
