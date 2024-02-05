@@ -90,10 +90,10 @@ assign addr[15:8] = (ram_write || ram_read_mreg) ? mreg_h_data_out : pc_data_out
 
 assign addr_out = (ram_read_pc || ram_read_mreg || ram_write) ? addr : 16'bz;
 
-//always @(posedge clk_ctrl) begin
-//    if (halt) begin
-//        $finish;
-//    end
-//end
+always_comb begin
+   if (halt) begin
+       $finish;
+   end
+end
 
 endmodule
