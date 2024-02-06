@@ -75,8 +75,6 @@ always_comb begin
 end
 
 always_ff @(posedge clk) begin
-
-
         // TX State Machine
         case(tx_state)
             READY: begin
@@ -106,7 +104,6 @@ always_ff @(posedge clk) begin
                 // Default state
             end
         endcase
-
 end
 
 endmodule
