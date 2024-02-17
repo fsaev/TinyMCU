@@ -15,9 +15,11 @@ This project is still a work in progress. The CPU works, you can have some fun b
 **Implemented:**
 NOP, HALT, LDAI, LDA, STA, LDBI, LDB, STB, ADD, SUB, AND, OR, XOR, NOT, SHL, SHR, JMP, JZ, JNZ
 
-
 **TODO:**
-ADDI, SUBI, ANDI, ORI, XORI, SHLI, SHRI, JC, JNC
+MOV, ADDI, SUBI, ANDI, ORI, XORI, SHLI, SHRI, JC, JNC
+
+**Wishlist:**
+CALL, RET, PUSH, POP, INT, IRET <- Stack and interrupts
 
 ### RAM
 **| simple_ram.sv |**
