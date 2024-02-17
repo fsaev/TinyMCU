@@ -41,25 +41,36 @@ module simple_ram(
         mem[15] = 8'h00; //
         mem[16] = 8'h28; //
 
-        mem[17] = `STA_RAM; // Store A
-        mem[18] = 8'hF0; // On UART
-        mem[19] = 8'h05; // DO register
+        // WAIT FOR TXR
+        mem[17] = `LDA_RAM; // Load A
+        mem[18] = 8'hF0; // On UART CR
+        mem[19] = 8'h01; // SR register
+        mem[20] = `LDBI;
+        mem[21] = 8'h02; // Load B with 0x02 // TXR mask
+        mem[22] = `AND; // AND with 0x02
+        mem[23] = `JZ; // If null, jump to WAIT FOR TXR
+        mem[24] = 8'h00; //
+        mem[25] = 8'h10; // Back to 17
 
-        mem[20] = `MOV_LA; // Load A with L
-        mem[21] = `LDBI;
-        mem[22] = 8'h01; // Load B with 0x01
-        mem[23] = `ADD; // Add 1 to A
-        mem[24] = `MOV_AL; // Load L with A
-        mem[25] = `JNC; // If no carry, jump to START OF LOOP
-        mem[26] = 8'h00; //
-        mem[27] = 8'h0A; //
+        mem[26] = `STA_RAM; // Store A
+        mem[27] = 8'hF0; // On UART
+        mem[28] = 8'h05; // DO register
 
-        mem[28] = `MOV_HA; // Load A with H
-        mem[29] = `ADD; // Add 1 to A
-        mem[30] = `MOV_AH; // Load H with A
-        mem[31] = `JMP; // Jump to START OF LOOP
-        mem[32] = 8'h00; //
-        mem[33] = 8'h0A; //
+        mem[29] = `MOV_LA; // Load A with L
+        mem[30] = `LDBI;
+        mem[31] = 8'h01; // Load B with 0x01
+        mem[32] = `ADD; // Add 1 to A
+        mem[33] = `MOV_AL; // Load L with A
+        mem[34] = `JNC; // If no carry, jump to START OF LOOP
+        mem[35] = 8'h00; //
+        mem[36] = 8'h0A; //
+
+        mem[37] = `MOV_HA; // Load A with H
+        mem[38] = `ADD; // Add 1 to A
+        mem[39] = `MOV_AH; // Load H with A
+        mem[40] = `JMP; // Jump to START OF LOOP
+        mem[41] = 8'h00; //
+        mem[42] = 8'h0A; //
 
 
         // END OF PROGRAM

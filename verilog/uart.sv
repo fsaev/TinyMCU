@@ -13,6 +13,13 @@ module uart(   input [2:0] device_select,
 );
 
 parameter device_address = 3'b011;
+parameter clock_freq_in = 10_000_000; // 10 MHz
+parameter baud_rate = 115200;
+parameter divisor = clock_freq_in / baud_rate;
+
+/* Baud rate clock */
+wire baud_clk;
+clk_divider #(.DIV(2)) clk_divider_inst(.clk(clk), .rst(1'b0), .out(baud_clk));
 
 /* UART State Machine */
 typedef enum logic [2:0] {
@@ -74,7 +81,8 @@ always_comb begin
     SR[1] = (tx_state == READY); // If bitcount is 0 TXR is clear
 end
 
-always_ff @(posedge clk) begin
+/* Data Loading */
+always_ff @(posedge baud_clk) begin
         // TX State Machine
         case(tx_state)
             READY: begin
@@ -86,7 +94,6 @@ always_ff @(posedge clk) begin
                         byte_out[0] <= 1; // Stop bit
                         bit_cnt <= 0;
 
-                        DO_has_data <= 0; // Ready for next byte
                         tx_state <= SHIFT_OUT_BYTE;
                     end
                 end
