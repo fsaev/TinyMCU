@@ -1,7 +1,6 @@
 /* Shamelessly stolen from https://digilent.com/reference/learn/programmable-logic/tutorials/use-flip-flops-to-build-a-clock-divider/start */
 
-module clk_divider(
-    parameter DIV = 2,
+module clk_divider #(parameter DIV = 2) (
     input clk,
     input rst,
     output out
